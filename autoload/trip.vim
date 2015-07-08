@@ -3,7 +3,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-let s:Buffer = vital#of("vital").import("Coaster.Buffer")
+let s:Buffer = vital#of("trip").import("Coaster.Buffer")
 
 
 function! trip#if(pattern, then, else)
