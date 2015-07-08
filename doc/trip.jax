@@ -1,0 +1,75 @@
+*trip.txt*	<C-a>/<C-x> の拡張プラグイン
+
+==============================================================================
+目次						*trip-contents*
+
+概要				|trip-introduction|
+インターフェース		|trip-interface|
+  キーマッピング		  |trip-key-mappings|
+  関数				  |trip-functions|
+
+
+==============================================================================
+概要						*trip-introduction*
+
+*trip.vim* は <C-a> と <C-x> を拡張するためのプラグインです。
+『col-sm-3』のようにマイナスの直前にスペース以外の文字がある場合にマイナスを
+無視してインクリメント/デクリメントを行ないます。
+
+>
+	" インクリメント/デクリメントする数値のマイナスの直前に
+	" スペース以外の文字があればマイナスを無視して
+	" インクリメント/デクリメントを行う
+	nmap <C-a> <Plug>(trip-increment)
+	nmap <C-x> <Plug>(trip-decrement)
+<
+
+NOTE:
+	-1 や 0 に対して |<Plug>(trip-decrement)| を呼び出し場合に意図しない
+	動作になる可能性があります。
+
+
+==============================================================================
+インターフェース				*trip-interface*
+
+------------------------------------------------------------------------------
+キーマッピング					*trip-key-mappings*
+
+<Plug>(trip-increment)				*<Plug>(trip-increment)*
+	カーソル下の単語が『\S-\d\+』にマッチした場合には <C-x>
+	を呼び出し、そうでなければ <C-a> を呼び出す。
+
+<Plug>(trip-decrement)				*<Plug>(trip-decrement)*
+	カーソル下の単語が『\S-\d\+』にマッチした場合には <C-a>
+	を呼び出し、そうでなければ <C-x> を呼び出す。
+
+					*<Plug>(trip-increment-ignore-minus)*
+<Plug>(trip-increment-ignore-minus)
+	数値のマイナス部を無視して <C-a> を行ないます。
+
+					*<Plug>(trip-decrement-ignore-minus)*
+<Plug>(trip-decrement-ignore-minus)
+	数値のマイナス部を無視して <C-x> を行ないます。
+
+------------------------------------------------------------------------------
+関数						*trip-functions*
+
+trip#increment({ignore}[, {else}])		*trip#increment()*
+	特定の条件で <C-a> を行わないためのヘルパ関数です。
+	カーソル下の単語が {ignore} にマッチした場合に {else}
+	を返し、それ以外の場合は <C-a> を返す。
+	{else} が渡されなければ空の文字列を返す。
+
+Example: >
+	" マイナスが付いている場合は <C-a> ではなくて <C-x> を実行する
+	noremap <expr> <Plug>(increment) trip#increment('-\d\+', "\<C-x>")
+<
+trip#decrement({ignore}[, {else}])		*trip#decrement()*
+	|trip#increment()| の <C-x> 版です。
+	{ignore} にマッチしなかった場合に <C-x> を返す以外は
+	|trip#increment()| と同等です。
+
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
